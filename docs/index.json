@@ -1,7 +1,10 @@
-﻿{
+{
   "format": 1,
   "title": { "zh": "提问改写", "en": "Ask Rewriter" },
-  "description": { "zh": "输入框左侧一个星芒图标：点一下，把含糊的一句话按当前会话改写成对方能答的提问。" },
+  "description": {
+    "zh": "输入框左侧一个星芒图标：点一下，把含糊的一句话按当前会话改写成对方能答的提问。",
+    "en": "A star left of the composer: click it to rewrite a vague question into an answerable one."
+  },
   "plugins": [
     {
       "name": "dsh-ask-cases",
