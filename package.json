@@ -1,0 +1,41 @@
+{
+  "name": "dsh-ask-cases",
+  "version": "0.1.0",
+  "description": "A star left of the composer: click it to rewrite a vague question into an answerable one, using the current conversation as context.",
+  "license": "MIT",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "dsh": ">=0.2.0"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "prompt",
+    "question",
+    "rewrite"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Laurusam/dsh-ask-cases.git"
+  },
+  "homepage": "https://github.com/Laurusam/dsh-ask-cases",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dsh": {
+    "client": {
+      "platform": "web"
+    }
+  }
+}
