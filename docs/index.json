@@ -1,0 +1,22 @@
+﻿{
+  "format": 1,
+  "title": { "zh": "提问改写", "en": "Ask Rewriter" },
+  "description": { "zh": "输入框左侧一个星芒图标：点一下，把含糊的一句话按当前会话改写成对方能答的提问。" },
+  "plugins": [
+    {
+      "name": "dsh-ask-cases",
+      "title": { "zh": "提问改写", "en": "Ask Rewriter" },
+      "description": {
+        "zh": "点一下输入框左侧的星芒，把含糊的一句话改写成对方能答的提问；结果只写回输入框，不会替你发送。",
+        "en": "Rewrite a vague question into an answerable one, in place, without sending it for you."
+      },
+      "icon": "./icon.svg",
+      "author": "Laurusam",
+      "homepage": "https://github.com/Laurusam/dsh-ask-cases",
+      "repository": { "url": "https://github.com/Laurusam/dsh-ask-cases" },
+      "versions": [
+        { "version": "0.1.0", "publishTimestamp": 1793093966, "source": { "type": "npm" }, "engines": { "dsh": ">=0.2.0" } }
+      ]
+    }
+  ]
+}
