@@ -585,7 +585,7 @@ function SettingsTab() {
   return h(
     "div",
     { className: "qc-set" },
-    h("h3", { className: "qc-setTitle" }, "提问改写"),
+    h("h3", { className: "qc-setTitle" }, "辅助提问"),
     h(
       "p",
       { className: "qc-setLead" },
@@ -611,7 +611,7 @@ function apply(ctx) {
         id: "ask-cases",
         order: 40,
         label: function () {
-          return "提问改写";
+          return "辅助提问";
         }
       },
       SettingsTab

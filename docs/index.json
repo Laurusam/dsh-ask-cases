@@ -1,24 +1,24 @@
 {
   "format": 1,
-  "title": { "zh": "提问改写", "en": "Ask Rewriter" },
+  "title": { "zh": "????", "en": "Assisted Asking" },
   "description": {
-    "zh": "输入框左侧一个星芒图标：点一下，把含糊的一句话按当前会话改写成对方能答的提问。",
-    "en": "A star left of the composer: click it to rewrite a vague question into an answerable one."
+    "zh": "????????????????????????????????????????????",
+    "en": "A vague question gets answered with length. Click the star left of the composer to make your sentence answerable."
   },
   "plugins": [
     {
       "name": "dsh-ask-cases",
-      "title": { "zh": "提问改写", "en": "Ask Rewriter" },
+      "title": { "zh": "????", "en": "Assisted Asking" },
       "description": {
-        "zh": "点一下输入框左侧的星芒，把含糊的一句话改写成对方能答的提问；结果只写回输入框，不会替你发送。",
-        "en": "Rewrite a vague question into an answerable one, in place, without sending it for you."
+        "zh": "?????????????????????????????????????????????????????????????????????????????????????????????????",
+        "en": "Most prompts fail because they never say what counts as a good answer. This plugin rewrites the sentence you were about to send, using the last few turns as context, into something answerable. It writes back to the composer and never sends for you."
       },
       "icon": "./icon.svg",
       "author": "Laurusam",
       "homepage": "https://github.com/Laurusam/dsh-ask-cases",
       "repository": { "url": "https://github.com/Laurusam/dsh-ask-cases" },
       "versions": [
-        { "version": "0.1.0", "publishTimestamp": 1793095727, "source": { "type": "npm" }, "engines": { "dsh": ">=0.2.0" } }
+        { "version": "0.1.2", "publishTimestamp": 1793096314, "source": { "type": "npm" }, "engines": { "dsh": ">=0.2.0" } }
       ]
     }
   ]

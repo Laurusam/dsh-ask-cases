@@ -1,80 +1,99 @@
-# dsh-ask-cases
+# 辅助提问 · Assisted Asking
 
-A star icon sits left of the composer in [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). Click it, and the sentence you were about to send is rewritten — in place, using the last few turns of the conversation — into something the other side can actually answer.
-
-It never sends for you. You look at the result, then press Enter yourself.
+`dsh-ask-cases` — 一个 DSH 插件。输入框左侧有个星芒，点一下，你正要发的那句话会被改成「对方能答」的样子；它只写回输入框，不会替你发送。
 
 ```
-before  我最近想找一份工作，
-after   我最近想找份工作，方向还没想好，能帮我理一下从哪开始吗？比如简历怎么改、往哪类岗位投比较合适。
+改前  我最近想找一份工作，
+改后  我最近想找份工作，方向还没想好，能帮我理一下从哪开始吗？比如简历怎么改、往哪类岗位投比较合适。
 ```
 
-## Why
+## 痛点：不是模型笨，问题里没写「什么算答对了」
 
-Most prompts fail for one reason: they describe a *topic* but never say what counts as a good answer. The model can't ask, so it fills the gap with length.
+大多数提问失败，不是信息不够多，是**没有终止条件**：
 
-The rewrite adds back the one or two things that were missing — who you are in this task, what shape the answer should take, what would make it wrong — and stops there. It is deliberately not a "prompt template generator": a two-sentence question does not become a fifteen-row table.
+- 你问「PARA 方法等相关的方法论」，它给你 353 行综述——因为「相关」没有边界，写多少都不算错；
+- 你问「接下来怎么办」，它给你一段泛泛的建议——因为「有用」无法被检验；
+- 你问「帮我看看这个方案」，它给你一篇点评——因为「看什么」没说。
 
-Anything it had to assume is listed separately, collapsed under `已默认 N 项`, and is never sent with your message.
+模型没法反问，于是用**篇幅**填满不确定性。你拿到的越长，越像“完成了”。
 
-## Install
+## 怎么发现的
 
-From the plugin market inside DSH: add the index source
+两条真实提问的对照：
+
+| | 原话 | 结果 |
+|---|---|---|
+| v1 | 「PARA 方法，等相关的方法论，目的是企业协作、经验沉淀」 | 353 行综述，读得完，但不知道哪一条能用 |
+| v2 | 「我们在做 X 插件，现在阶段是 L1。给我一张表：候选方法论 / 用在哪层 / 怎么用 / 局限。材料已给，判据是每条必须能落到一条条件改写上。不要综述，不超过 10 条。」 | 10 条能用的表 |
+
+同一件事，差别不在字数，在**有没有一条能判掉不合格答案的判据**。
+
+## 什么时候该用
+
+- 你只打了一句话，但心里清楚要什么——让它替你补上缺的那半句；
+- 话题聊到一半，你想接着问，但懒得复述背景——它会读最近三轮；
+- 你要的是一份产出（方案 / 清单 / 判断），不是科普。
+
+**不该用的时候**：纯闲聊、纯事实查询、你已经写得很清楚的那句话。它不会把一个完整的问题改得更好，只会改得更长。
+
+## 它做什么、不做什么
+
+做：读你的草稿 + 当前会话最近 6 条消息（约 3 轮）→ 补上一两处关键信息 → 流式写回面板。
+
+不做：不替你编判据、不替你发送、不写会话日志、不把结果塞进模型上下文（除非你自己按发送）。它假设了什么，会单独收在 `已默认 N 项` 里，展开可看，且**永远不会跟着消息发出去**。
+
+## 安装
+
+在 DSH 的插件市场里添加索引源：
 
 ```
 https://laurusam.github.io/dsh-ask-cases/index.json
 ```
 
-then search for **提问改写 / Ask Rewriter** and install.
+然后搜索 **辅助提问 / Assisted Asking** 安装。
 
-Manual install into a profile:
+手动安装：
 
 ```bash
 npm install dsh-ask-cases
-# then add to cordis.patch.yml:
+# 然后在 cordis.patch.yml 里加：
 # - insert:
 #     - id: ask-cases
 #       name: "dsh-ask-cases"
 ```
 
-Restart DSH (the host composes plugins at boot), then open any session — the star appears left of the input, next to the permission chips.
+装完重启 DSH（宿主在启动时组装插件），打开任意会话，星芒会出现在输入框左侧、权限标签同一行。
 
-## Use
+## 用法
 
-1. Type your question, however rough.
-2. Click the star.
-3. The rewrite streams into a panel. Read it; if `已默认` is expanded, check the assumptions.
-4. **仅写入** puts it in the composer so you can edit; **写入并发送** sends it as is.
+1. 写下你的问题，多粗糙都行；
+2. 点星芒；
+3. 改写会流式出现在面板里，先读一遍；`已默认 N 项` 展开看看它替你假设了什么；
+4. **仅写入**放回输入框让你改，**写入并发送**直接发出去。
 
-The panel is keyboard-dismissable (`Esc`) and positions itself above the button, so it never covers the composer.
+面板支持 `Esc` 关闭，位置在按钮上方，不会挡住输入框。
 
-## Settings
+## 设置
 
-**Settings → Built-in plugins → 提问改写** carries the description; the behavior itself has no knobs yet except one hard rule: an empty draft does nothing.
+**设置 → 内置插件 → 辅助提问** 有说明。目前没有可调参数——只有一条硬规则：空草稿不触发。
 
-## How it works
+## 已知限制
 
-- A host half registers one HTTP route under `/plugins/ask-cases/rewrite`. It reads the draft plus the last six messages of the session (each clipped to 300–400 characters), asks the model to rewrite, and streams the answer back as NDJSON.
-- The browser half registers a single React component into `conversation.input.left`, streams the deltas into the panel, splits the model's assumptions from the sendable text, and writes the result back through the composer's public `inputActions` face.
-- Nothing is written to the session log, and nothing enters the model's context unless you send it.
+- **不能拦截发送。** 面板可以替你写、替你按发送，但拦不住你按发送键——DSH 没有暴露提交前的钩子。
+- **上下文故意很短。** 6 条、约 3 轮。更长会让改写被之前的讨论带偏。
+- **中文优先。** 提示词的语体规则是按中文写的。
+- **不会替你编问题。** 一两个字的草稿（比如「测试」）会原样返回并注明，而不是被扩写成一个你没问过的问题。
 
-## Limitations
-
-- **No send interception.** The panel can write and submit for you, but it cannot hook the send button itself — DSH exposes no pre-submit extension point.
-- **Context is short by design.** Six messages, ~3 turns. Longer context makes the rewrite drift toward whatever was discussed before.
-- **Chinese-first.** The prompt and typography are tuned for Chinese; other languages work but the tone rules are written for Chinese.
-- **It will not invent a question.** One or two characters ("测试") are passed through unchanged with a note, rather than being expanded into something you never asked.
-
-## Development
+## 开发
 
 ```bash
-node build.mjs            # inline src/ into lib/client.js
-node test/rules.test.mjs  # deterministic core
+node build.mjs            # 把 src/ 内联成 lib/client.js
+node test/rules.test.mjs
 node test/bundle.smoke.mjs
-node src/cli.mjs "你的问题"  # run the slot diagnosis from a terminal
+node src/cli.mjs "你的问题"
 ```
 
-`lib/client.js` is generated; edit `src/` and rebuild.
+`lib/client.js` 是生成物，改 `src/` 后重新构建。
 
 ## License
 

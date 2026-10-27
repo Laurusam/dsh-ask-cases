@@ -1,7 +1,7 @@
 {
   "name": "dsh-ask-cases",
-  "version": "0.1.0",
-  "description": "A star left of the composer: click it to rewrite a vague question into an answerable one, using the current conversation as context.",
+  "version": "0.1.2",
+  "description": "Assisted Asking: a star left of the composer rewrites a vague question into an answerable one, using the current conversation as context.",
   "license": "MIT",
   "type": "module",
   "main": "lib/index.js",
